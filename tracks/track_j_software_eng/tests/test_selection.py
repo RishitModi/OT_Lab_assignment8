@@ -198,6 +198,61 @@ def test_mutant_operator_no_site_leaves_unchanged() -> None:
     assert mutated_m5 == ir, "Operator M5 must leave instruction list unchanged when no lt/le present"
 
 
+def test_mutant_infinite_loop_killed_and_pass_restored() -> None:
+    """Verify that a mutant causing an infinite loop is killed within step budget and pass is restored."""
+    import cc_lang
+    import cc_passes
+    from sj_suite import run_test
+
+    source = (
+        "i = 0;\n"
+        "while (i < 5) {\n"
+        "    i = i + 1;\n"
+        "}\n"
+        "print i;\n"
+    )
+
+    # 1. Unmutated reference execution passes
+    assert run_test(source, test_name="t_loop"), "Unmutated program must pass run_test"
+
+    orig_pass = cc_passes.PASS_REGISTRY["dce"]
+    orig_attr = getattr(cc_passes, "dce")
+
+    # Hand-made mutated pass that turns "i = i + 1" into "i = i + 0" in the while loop
+    def mutated_dce(ir: list[cc_lang.Instruction]) -> list[cc_lang.Instruction]:
+        res = orig_pass(ir)
+        mutated: list[cc_lang.Instruction] = []
+        for inst in res:
+            op = inst[0]
+            if op == "add" and inst[3] == 1:
+                mutated.append((op, inst[1], inst[2], 0))
+            else:
+                mutated.append(inst)
+        return mutated
+
+    # Install the hand-made mutated pass
+    cc_passes.PASS_REGISTRY["dce"] = mutated_dce
+    setattr(cc_passes, "dce", mutated_dce)
+
+    try:
+        # Run test under active mutant.
+        # With i = i + 0, loop never terminates. Step budget is exceeded, which counts
+        # as test failing (mutant is killed), and StepLimitExceeded does not propagate.
+        passed = run_test(source, mutant_pass="dce", test_name="t_loop")
+        assert not passed, "Mutant creating an infinite loop must be reported as killed (passed=False)"
+    finally:
+        # Restore original pass
+        cc_passes.PASS_REGISTRY["dce"] = orig_pass
+        setattr(cc_passes, "dce", orig_attr)
+
+    # 2. Verify that original pass was restored
+    assert cc_passes.PASS_REGISTRY["dce"] is orig_pass, "Original pass must be restored in PASS_REGISTRY"
+    assert getattr(cc_passes, "dce") is orig_attr, "Original pass must be restored on module cc_passes"
+
+    # 3. Verify clean unmutated execution passes again
+    assert run_test(source, test_name="t_loop"), "Unmutated program must pass after pass restoration"
+
+
 def test_smoke_run_all(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Smoke test running quick mode of run_all into tmp_path without importing run_all directly."""
     run_all_path = _TRACK_ROOT / "run_all.py"

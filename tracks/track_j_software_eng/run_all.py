@@ -195,7 +195,7 @@ def run_experiment_j0(
     plt.close()
 
     # 5. Full suite coverage
-    print("Collecting full-suite line and arc coverage...")
+    print(f"Collecting full-suite line and arc coverage across {len(tests)} tests...")
     line_cover: dict[str, set[tuple[int, int]]] = {}
     arc_cover: dict[str, set[tuple[int, int, int]]] = {}
     full_lines: set[tuple[int, int]] = set()
@@ -207,7 +207,9 @@ def run_experiment_j0(
         t_step += 1
         if t_step > cap_t:
             break
-        l_cov, a_cov = collect_coverage(lambda: run_test(src))
+        if t_step == 1 or t_step % 25 == 0 or t_step == len(tests):
+            print(f"Coverage collection progress: {t_step}/{len(tests)} tests traced")
+        l_cov, a_cov = collect_coverage(lambda: run_test(src, test_name=name))
         line_cover[name] = l_cov
         arc_cover[name] = a_cov
         full_lines.update(l_cov)
@@ -283,6 +285,7 @@ def run_experiment_j1(
     j0_data: dict[str, Any],
     n_random_seeds: int,
     verification_failures: list[str],
+    deadline: float | None = None,
 ) -> dict[str, Any]:
     """Perform weighted set cover minimization using greedy and ILP formulations for lines and arcs."""
     print("=== Running Experiment J1: Test Suite Minimization ===")
@@ -296,9 +299,29 @@ def run_experiment_j1(
     all_mutants = get_all_mutants()
 
     print("Computing mutant kill matrix on full suite...")
-    k_matrix = kill_matrix(tests, all_mutants)
+    km_res = kill_matrix(tests, all_mutants, deadline=deadline)
+    k_matrix = km_res.matrix
+    completed_mutants = km_res.completed_mutants
+    is_partial = km_res.partial
+
+    # Save kill matrix as results/track_j/kill_matrix.csv immediately after it is computed
+    km_cols = ["mutant", "pass", "operator"] + [t[0] for t in tests]
+    km_rows: list[dict[str, Any]] = []
+    for m in completed_mutants:
+        pname, op = m
+        row_dict: dict[str, Any] = {
+            "mutant": f"{pname}:{op}",
+            "pass": pname,
+            "operator": op,
+        }
+        for t_name, _ in tests:
+            row_dict[t_name] = 1 if k_matrix[m].get(t_name, False) else 0
+        km_rows.append(row_dict)
+    write_csv(out_dir / "kill_matrix.csv", km_rows, km_cols)
+    print(f"Saved kill matrix ({len(completed_mutants)}/{len(all_mutants)} mutants, partial={is_partial}) to {out_dir / 'kill_matrix.csv'}")
+
     detectable_mutants = [
-        m for m in all_mutants
+        m for m in completed_mutants
         if any(k_matrix[m][t_name] for t_name, _ in tests)
     ]
     n_detectable = len(detectable_mutants)
@@ -369,9 +392,10 @@ def run_experiment_j1(
         ("lines", line_cover, full_lines),
         ("arcs", arc_cover, full_arcs),
     ]:
-        print(f"Minimizing for coverage kind: {kind} ({len(universe)} elements)...")
+        print(f"--- Minimization for {kind} ({len(universe)} elements) ---")
 
         # 1. Random until cover baseline
+        print(f"[{kind}] Running random-until-cover baseline ({n_random_seeds} seeds)...")
         rand_res = select_random_until_cover(cov_dict, cost_map, universe, seeds=n_random_seeds)
         first_rand_sel = rand_res["selections"][0] if rand_res["selections"] else []
         rand_act_time, rand_failing, rand_mut_score = eval_selection(first_rand_sel)
@@ -379,6 +403,7 @@ def run_experiment_j1(
             (full_actual_time - rand_act_time) / full_actual_time * 100.0
             if full_actual_time > 0 else 0.0
         )
+        print(f"[{kind}] Random baseline mean size: {rand_res['mean_size']:.1f} tests")
         j1_records.append({
             "coverage_kind": kind,
             "method": f"random_until_cover(mean_N={rand_res['mean_size']:.1f})",
@@ -394,9 +419,11 @@ def run_experiment_j1(
         })
 
         # 2. Greedy selection
+        print(f"[{kind}] Running greedy heuristic minimization...")
         t0_g = time.perf_counter()
         greedy_sel = select_greedy(cov_dict, cost_map, universe)
         t_greedy = time.perf_counter() - t0_g
+        print(f"[{kind}] Greedy selected {len(greedy_sel)} tests in {t_greedy:.4f}s")
 
         selections[f"greedy_{kind}"] = greedy_sel
         g_cost = sum(cost_map.get(t, 0.0) for t in greedy_sel)
@@ -423,7 +450,9 @@ def run_experiment_j1(
         })
 
         # 3. ILP exact selection
+        print(f"[{kind}] Running exact ILP minimization (time_limit=60s)...")
         ilp_sel, ilp_opt, ilp_cost, ilp_solve_time = select_ilp(cov_dict, cost_map, universe, time_limit=60.0)
+        print(f"[{kind}] ILP selected {len(ilp_sel)} tests (optimal={ilp_opt}) in {ilp_solve_time:.4f}s")
         selections[f"ilp_{kind}"] = ilp_sel
         ilp_act_time, ilp_failing, ilp_mut_score = eval_selection(ilp_sel)
         ilp_cov_elements = set().union(*(cov_dict.get(t, set()) for t in ilp_sel)) & universe
@@ -507,8 +536,10 @@ def run_experiment_j1(
         "j1_records": j1_records,
         "selections": selections,
         "k_matrix": k_matrix,
+        "completed_mutants": completed_mutants,
         "detectable_mutants": detectable_mutants,
         "all_mutants": all_mutants,
+        "is_partial": is_partial,
     }
 
 
@@ -613,9 +644,11 @@ def run_experiment_j3(
     print("=== Running Experiment J3: Fault-Injection Cost & Mutation Testing ===")
 
     all_mutants = j1_data["all_mutants"]
+    completed_mutants = j1_data.get("completed_mutants", all_mutants)
     detectable_mutants = j1_data["detectable_mutants"]
     k_matrix = j1_data["k_matrix"]
     selections = j1_data["selections"]
+    is_partial = j1_data.get("is_partial", False)
 
     methods = ["full", "greedy_lines", "ilp_lines", "greedy_arcs", "ilp_arcs"]
     j3_records: list[dict[str, Any]] = []
@@ -656,7 +689,9 @@ def run_experiment_j3(
     return {
         "j3_records": j3_records,
         "total_mutants": len(all_mutants),
+        "completed_count": len(completed_mutants),
         "detectable_count": len(detectable_mutants),
+        "is_partial": is_partial,
     }
 
 
@@ -717,6 +752,10 @@ def write_summary_report(
     if j1_res is not None:
         lines.append("## J1: Test Suite Minimization (Weighted Set Cover)")
         lines.append("Evaluates full suite against random-until-cover, greedy heuristic, and exact 0/1 ILP minimization.")
+        if j1_res.get("is_partial", False):
+            lines.append(f"- **Kill Matrix Execution**: partial: {len(j1_res.get('completed_mutants', []))} of {len(j1_res.get('all_mutants', []))} mutants completed")
+        else:
+            lines.append(f"- **Kill Matrix Execution**: complete: {len(j1_res.get('all_mutants', []))} of {len(j1_res.get('all_mutants', []))} mutants")
         lines.append("")
         cols = [
             "coverage_kind",
@@ -749,7 +788,14 @@ def write_summary_report(
         lines.append("## J3: Fault-Injection & Mutation Testing")
         lines.append("Evaluates whether minimized test suites preserve mutant killing capability.")
         lines.append("")
-        lines.append(f"- **Total Injected Mutants**: {j3_res['total_mutants']}")
+        k_comp = j3_res.get("completed_count", j3_res["total_mutants"])
+        n_tot = j3_res["total_mutants"]
+        if j3_res.get("is_partial", False):
+            lines.append(f"- **Mutation Matrix Status**: partial: {k_comp} of {n_tot} mutants completed")
+        else:
+            lines.append(f"- **Mutation Matrix Status**: complete: {n_tot} of {n_tot} mutants")
+        lines.append(f"- **Total Injected Mutants**: {n_tot}")
+        lines.append(f"- **Completed Mutants Evaluated**: {k_comp}")
         lines.append(f"- **Detectable Mutants by Full Suite**: {j3_res['detectable_count']}")
         lines.append("")
         lines.append("> **Note on Fault Injection Proxy**: Fault injection in this benchmark modifies the instruction list output of individual optimization passes. This operates as an empirical proxy for fault-detection ability; structural coverage and fault-detection capability are not theoretically identical.")
@@ -794,6 +840,7 @@ def main() -> None:
     """Orchestrate all Track J benchmark experiments."""
     parser = argparse.ArgumentParser(description="Track J: Software Engineering Optimization")
     parser.add_argument("--quick", action="store_true", help="Execute faster run with fewer fuzz tests")
+    parser.add_argument("--max-minutes", type=float, default=None, help="Maximum execution minutes for global deadline")
     parser.add_argument("--out", type=str, default="results/track_j", help="Output directory path")
     args = parser.parse_args()
 
@@ -803,6 +850,13 @@ def main() -> None:
     quick = bool(args.quick)
     n_fuzz = 30 if quick else 150
     n_random_seeds = 20 if quick else 50
+
+    if args.max_minutes is not None:
+        max_minutes = float(args.max_minutes)
+    else:
+        max_minutes = 3.0 if quick else 10.0
+
+    global_deadline = time.time() + max_minutes * 60.0
 
     verification_failures: list[str] = []
     failed_experiments: dict[str, str] = {}
@@ -834,6 +888,7 @@ def main() -> None:
                     j0_res,
                     n_random_seeds=n_random_seeds,
                     verification_failures=verification_failures,
+                    deadline=global_deadline,
                 )
             except Exception:
                 failed_experiments["J1"] = traceback.format_exc()

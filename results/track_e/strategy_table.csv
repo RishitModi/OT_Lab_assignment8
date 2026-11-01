@@ -1,0 +1,7 @@
+Method,Variable type,Problem size handled,Exact or heuristic,Hardware,Parallelism,Chapter 6 technique
+order received (baseline),permutation,any n,heuristic (baseline),one CPU core,none,baseline
+nearest neighbour,permutation,any n,heuristic,one CPU core,parallel over start nodes,greedy
+2-opt,permutation,up to a few thousand stops,heuristic reaching a local optimum,one CPU core,parallel restarts,local search
+simulated annealing,permutation,any n,heuristic,one CPU core,parallel independent chains,stochastic search
+Held-Karp,subsets of stops,n up to about 20 because memory grows as n * 2^n,exact,one CPU core with large memory,parallel over subsets of equal size,dynamic programming
+ILP with MTZ,binary arc variables plus continuous order variables,up to about 15 to 30 stops in minutes with a general solver,exact,solver runs on CPU,solver-internal parallelism,ILP and branch-and-bound
