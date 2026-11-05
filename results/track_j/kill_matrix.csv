@@ -1,0 +1,1 @@
+mutant,pass,operator,sum_squares,fib_iter,primes_trial_division,collatz_steps,horner_poly,cse_heavy,gcd_sum,dead_code,fuzz_0,fuzz_1,fuzz_2,fuzz_3,fuzz_4,fuzz_5,fuzz_6,fuzz_7,fuzz_8,fuzz_9,fuzz_10,fuzz_11,fuzz_12,fuzz_13,fuzz_14,fuzz_15,fuzz_16,fuzz_17,fuzz_18,fuzz_19,fuzz_20,fuzz_21,fuzz_22,fuzz_23,fuzz_24,fuzz_25,fuzz_26,fuzz_27,fuzz_28,fuzz_29

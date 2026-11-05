@@ -35,10 +35,18 @@ python -m pytest tracks/track_j_software_eng/tests -q
 ```
 
 ## Results
-<!-- Experimental outcomes, comparison tables, and plots saved in results/ -->
+All tables and figures are produced by python tracks/track_j_software_eng/run_all.py and listed in results/track_j/SUMMARY.md (the final results use the --quick configuration with 38 tests; results/track_j/SUMMARY_full_J0_only.md, if present, holds the baseline and profile of the 158-test universe: median full-suite runtime 6.16 s, 905 of 1360 executable lines covered). Code under test: 1644 non-blank non-comment lines of the Track F compiler. 38 tests, full suite: summed cost 1.44 s, runtime 1.66 s. Minimisation keeping all covered lines: random order needs 31 tests on average; greedy 9 tests (89 percent measured runtime reduction); exact ILP 7 tests (91 percent). Keeping all covered arcs: greedy 10 tests (77 percent), ILP 8 tests (82 percent). Coverage was preserved at 100 percent with no failing test. Prioritisation: normalised coverage-time area 0.997 for greedy additional coverage and cheapest-first, 0.983 for random orders. Fault-detection cost was not measured (mutation step incomplete).
 
 ## Correctness check
-<!-- Verification steps, assertions, unit tests, and theoretical invariants checked -->
+- All tests pass on the unmodified compiler (38 of 38, and 158 of 158 in the baseline run).
+- Every selection covers 100 percent of the elements it was asked to cover and has no failing tests.
+- ILP cost is at most greedy cost, which is at most the full-suite cost, in every row.
+- Coverage is traced with sys.settrace (line and arc).
 
 ## Limitations
-<!-- Computational bottlenecks, approximations, assumptions, and failure modes -->
+- The final results are for 38 tests, not 158.
+- The fault-injection (mutation) experiment did not complete and its scores (100 percent over zero detectable mutants) are not valid (Failure Log cases 25 and 26), so the loss of fault-detection ability from minimisation is not measured.
+- Coverage is not fault detection.
+- Timings are single-machine wall-clock values with about 8 points of noise.
+- The baseline runtime of J0 and J1 disagree (case 26).
+- The selection must be recomputed when the code changes.

@@ -1,4 +1,4 @@
 strategy,normalized_auc
-greedy_additional,0.9968130889325825
-cost_ascending,0.9921180090868087
-random_order(mean_over_20_seeds),0.9820196156619081
+greedy_additional,0.9974266513461522
+cost_ascending,0.9967479379112594
+random_order(mean_over_20_seeds),0.9826073442818082
