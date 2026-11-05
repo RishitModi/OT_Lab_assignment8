@@ -167,8 +167,10 @@ All AI tool interactions used throughout the design, formulation, implementation
 | :--- | :--- | :--- | :--- | :--- |
 | Antigravity IDE | Claude Sonnet 5.5 | All (setup), A, B, C, D, E, F, G, H, I, J, tool comparison | 2026-10-28, 2026-10-29, 2026-10-30, 2026-10-31, 2026-11-01, 2026-11-05 | Planning, code generation, unit-test writing, experiment scripting, debugging, documentation (repository skeleton, templates, shared utilities in common/, Track A continuous optimization, Track B discrete optimization, Track C quantum optimization, Track D submodular, parallel and distributed optimization, Track F compiler optimization, Track H DBMS query optimization, Track I quantum algorithms and QML); test correction; experiment scripting (exp1–exp6, Track B discrete benchmarks, Track C quantum experiments C1–C5, Track D experiments D1–D4, Track F experiments F1–F3, Track H DBMS index selection experiments, Track I quantum algorithms and QML experiments I1–I5, run_all, smoke tests); code generation, unit-test writing, experiment scripting, documentation |
 | Antigravity IDE | Gemini 3.8 Flash | All Tracks | 2026-10-28 | Repository skeleton, templates, shared utilities |
+| GitHub Copilot | model not recorded | tool comparison | 2026-11-05 | code generation for the comparison task |
+| Claude (claude.ai chat) | Claude Sonnet 5.5 | A to J (planning, prompt writing, results review, report text) and tool comparison verifier | 2026-10-28 to 2026-11-05 | planning, prompt writing, debugging of results, documentation, test script (tool_comparison/verify.py) |
 | [e.g., Claude] | [e.g., Claude 3.7 Sonnet] | [e.g., Track A, Track C] | [YYYY-MM-DD] | [e.g., Algorithm formulation, test generation] |
-| [e.g., ChatGPT] | [e.g., GPT-4o] | [e.g., Track B] | [YYYY-MM-DD] | [e.g., Debugging ILP formulations] |
+| [e.g., Copilot] | [ random ] | [e.g., Tools Comparison] | [2026-11-05] | [e.g., Debugging ILP formulations] |
 
 ---
 
