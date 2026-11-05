@@ -68,10 +68,18 @@ python -m pytest tracks/track_e_case_study/tests -q
 ```
 
 ## Results
-<!-- Experimental outcomes, comparison tables, and plots saved in results/ -->
+All tables and figures are produced by python tracks/track_e_case_study/run_all.py and listed in results/track_e/SUMMARY.md; the final results use the --quick configuration (2 instances per size). Baseline: order-received tour. Evidence: it is on average 65.6 percent longer than the optimum for n = 8 and 10 (46.5 and 84.8 percent) and 3.1 and 5.7 times as long as the best tour found for n = 20 and 50. Exact comparison (n = 8, 10): nearest neighbour gap 8.5 and 13.4 percent, nearest neighbour + 2-opt 0 and 0.8 percent, simulated annealing (0.5 s) and ILP 0 percent; Held-Karp 26 ms and 140 ms. Scaling at n = 50: nearest neighbour 24.0 percent in 0.6 ms, nearest neighbour + 2-opt 5.6 percent in 20 ms, random start + 2-opt 0.7 percent in 118 ms, simulated annealing best found in 0.3 s. Anytime (n = 50, seed 0): nearest neighbour 119.16 km, 2-opt 105.80 km, simulated annealing 104.44 km. Sensitivity (n = 100, 0.2 s): a low initial temperature gives shorter tours (156 to 159 km versus 171 to 174 km for the highest).
 
 ## Correctness check
-<!-- Verification steps, assertions, unit tests, and theoretical invariants checked -->
+- in-run checks passed (Held-Karp equals the ILP objective when optimal; no heuristic below the optimum; every tour valid and its recomputed length equals the reported one; 2-opt never lengthens a tour)
+- unit tests are in tracks/track_e_case_study/tests
 
 ## Limitations
-<!-- Computational bottlenecks, approximations, assumptions, and failure modes -->
+- quick configuration with 2 instances per size, so the standard deviations are the spread of two values
+- exact comparison only up to n = 10 and scaling only up to n = 50
+- synthetic Euclidean stops, one vehicle, no time windows
+- the reference for n >= 20 is the best tour found, not a proven optimum
+- simulated annealing always used its full time limit
+- the cooling-rate comparison is inconclusive and two settings gave identical results (cause not verified)
+- run times are single-machine wall-clock values
+- results were produced with the system Python 3.15.1 because pandas is blocked in the virtual environment

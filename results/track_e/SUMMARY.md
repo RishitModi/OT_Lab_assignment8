@@ -3,11 +3,11 @@
 ## Environment and Run Metadata
 
 - **Operating System / Platform:** Windows-11-10.0.26200-SP0
-- **Python Version:** 3.12.10
-- **NumPy Version:** 2.5.4
+- **Python Version:** 3.15.1
+- **NumPy Version:** 2.5.2
 - **SciPy Version:** 1.18.1
 - **Mode:** Quick mode
-- **Total Runtime:** 11.15 seconds
+- **Total Runtime:** 16.92 seconds
 
 ## Experiment E0: Strategy-Selection Table
 
@@ -30,18 +30,18 @@ Comparative benchmark of provably exact algorithms (Held-Karp dynamic programmin
 
 | n | method | mean_gap_percent | std_gap_percent | mean_runtime_s | std_runtime_s |
 | --- | --- | --- | --- | --- | --- |
-| 8 | order received | 46.47 | 5.384 | 0.002935 | 0.002808 |
-| 8 | nearest neighbour | 8.497 | 8.497 | 1.34e-05 | 7e-07 |
-| 8 | nearest neighbour + 2-opt | 0 | 0 | 0.0002653 | 0.0002048 |
-| 8 | simulated annealing | 7.699e-15 | 7.699e-15 | 0.5008 | 0.0003913 |
-| 8 | Held-Karp | 0 | 0 | 0.005956 | 0.00088 |
-| 8 | ILP | 7.699e-15 | 7.699e-15 | 0.3251 | 0.1563 |
-| 10 | order received | 84.76 | 4.352 | 0.0001116 | 1.7e-06 |
-| 10 | nearest neighbour | 13.39 | 9.722 | 1.36e-05 | 5.999e-07 |
-| 10 | nearest neighbour + 2-opt | 0.8471 | 0.8471 | 4.71e-05 | 1.1e-06 |
-| 10 | simulated annealing | 0 | 0 | 0.5006 | 6.89e-05 |
-| 10 | Held-Karp | 0 | 0 | 0.02784 | 0.002145 |
-| 10 | ILP | 0 | 0 | 0.2352 | 0.1552 |
+| 8 | order received | 46.47 | 5.384 | 0.0004152 | 0.0001066 |
+| 8 | nearest neighbour | 8.497 | 8.497 | 4.29e-05 | 5.8e-06 |
+| 8 | nearest neighbour + 2-opt | 0 | 0 | 0.0001522 | 3.225e-05 |
+| 8 | simulated annealing | 7.699e-15 | 7.699e-15 | 0.5029 | 6.43e-05 |
+| 8 | Held-Karp | 0 | 0 | 0.02649 | 0.001576 |
+| 8 | ILP | 7.699e-15 | 7.699e-15 | 1.013 | 0.5076 |
+| 10 | order received | 84.76 | 4.352 | 0.0002935 | 9.45e-06 |
+| 10 | nearest neighbour | 13.39 | 9.722 | 4.515e-05 | 1.501e-07 |
+| 10 | nearest neighbour + 2-opt | 0.8471 | 0.8471 | 0.0001627 | 3.6e-06 |
+| 10 | simulated annealing | 0 | 0 | 0.5037 | 0.000296 |
+| 10 | Held-Karp | 0 | 0 | 0.1396 | 0.0004565 |
+| 10 | ILP | 0 | 0 | 0.7881 | 0.5127 |
 
 **Evidence for Assignment Question 1:** Across benchmark instances, the current order-received baseline exceeds the provably optimal tour by a mean of 65.62% (standard deviation: 19.76%).
 
@@ -54,16 +54,16 @@ Empirical scaling analysis of fast heuristic algorithms across problem instances
 
 | n | method | mean_gap_percent | std_gap_percent | mean_runtime_s | std_runtime_s |
 | --- | --- | --- | --- | --- | --- |
-| 20 | order received | 211.8 | 69.9 | 5.695e-05 | 8.75e-06 |
-| 20 | nearest neighbour | 2.013 | 2.013 | 3.475e-05 | 7.499e-07 |
-| 20 | nearest neighbour + 2-opt | 1.966 | 1.966 | 0.0001294 | 1.57e-05 |
-| 20 | random start + 2-opt | 5.277 | 4.81 | 0.001667 | 0.0003313 |
-| 20 | simulated annealing | 0 | 0 | 0.3007 | 3.905e-05 |
-| 50 | order received | 468 | 56.09 | 0.000116 | 8.65e-06 |
-| 50 | nearest neighbour | 24.01 | 10.46 | 0.0004089 | 1.65e-06 |
-| 50 | nearest neighbour + 2-opt | 5.648 | 4.834 | 0.01232 | 0.00073 |
-| 50 | random start + 2-opt | 0.6723 | 0.5669 | 0.05658 | 0.008086 |
-| 50 | simulated annealing | 0 | 0 | 0.3018 | 0.0004949 |
+| 20 | order received | 211.8 | 69.9 | 0.000162 | 2.265e-05 |
+| 20 | nearest neighbour | 2.013 | 2.013 | 0.0005975 | 0.0004924 |
+| 20 | nearest neighbour + 2-opt | 1.966 | 1.966 | 0.0008892 | 0.0004105 |
+| 20 | random start + 2-opt | 5.277 | 4.81 | 0.005302 | 0.001287 |
+| 20 | simulated annealing | 0 | 0 | 0.3016 | 0.001359 |
+| 50 | order received | 468 | 56.09 | 0.0001635 | 8e-06 |
+| 50 | nearest neighbour | 24.01 | 10.46 | 0.0005599 | 5.55e-05 |
+| 50 | nearest neighbour + 2-opt | 5.648 | 4.834 | 0.0205 | 0.006734 |
+| 50 | random start + 2-opt | 0.6723 | 0.5669 | 0.1182 | 0.01673 |
+| 50 | simulated annealing | 0 | 0 | 0.3027 | 0.0009583 |
 
 - Aggregate CSV: `e2_aggregated.csv`
 - Solution Gap Plot: `e2_scaling_gap.png`
@@ -77,7 +77,7 @@ Evaluation of the anytime objective improvement curve during Simulated Annealing
 - Nearest Neighbour length: 119.16 km
 - Nearest Neighbour + 2-opt length: 105.80 km
 - Simulated Annealing best length: 104.44 km
-- Trajectory samples captured: 161
+- Trajectory samples captured: 134
 
 - Anytime Convergence Curve: `e3_anytime_curve.png`
 - Route Map Figure: `e3_map_comparison.png`
@@ -89,14 +89,14 @@ Sensitivity analysis of Simulated Annealing performance under variations in the 
 
 | t0_factor | alpha | mean_length_km | std_length_km |
 | --- | --- | --- | --- |
-| 0.01 | 0.999 | 156.1 | 5.728 |
-| 0.01 | 0.9995 | 153.6 | 8.236 |
-| 0.01 | 1 | 154.9 | 8.147 |
-| 0.1 | 0.999 | 160.2 | 5.939 |
-| 0.1 | 0.9995 | 158.6 | 1.964 |
-| 0.1 | 1 | 164.1 | 6.556 |
-| 1 | 0.999 | 161.2 | 6.511 |
-| 1 | 0.9995 | 158.2 | 5.682 |
+| 0.01 | 0.999 | 158.8 | 8.263 |
+| 0.01 | 0.9995 | 155.9 | 8.39 |
+| 0.01 | 1 | 157.5 | 8.265 |
+| 0.1 | 0.999 | 161.9 | 5.646 |
+| 0.1 | 0.9995 | 165.7 | 2.911 |
+| 0.1 | 1 | 172.2 | 6.848 |
+| 1 | 0.999 | 171 | 5.666 |
+| 1 | 0.9995 | 173.6 | 8.302 |
 | 1 | 1 | 173.6 | 8.302 |
 
 - Sensitivity CSV: `e4_sensitivity.csv`
