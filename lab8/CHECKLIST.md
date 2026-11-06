@@ -2,61 +2,64 @@
 
 Progress tracker across Chapter 6 optimization areas and techniques.
 
+**Legend:** Status values are Done; Done (caveat) = done with a limitation named in the Result column; Partial = only part of the item is covered; Not completed = code written but no valid result; Known bug - not covered = experiment invalid, not reported. "Results" refer to the files results/\<track\>/SUMMARY.md and the report sections.
+
 | Chapter 6 area | Method/technique | Experiment | Code location | Result | Status |
 | :--- | :--- | :--- | :--- | :--- | :---: |
-| Foundations | ML as optimization (parameters, loss, regularization) | exp6 | tracks/track_a_continuous/exp6_backprop_mlp.py | see results/track_a/SUMMARY.md, exp1 to exp6 | Done |
-| Foundations | Continuous vs discrete | exp1 | tracks/track_a_continuous/exp1_optimizer_comparison.py | see results/track_a/SUMMARY.md, exp1 to exp6 | Done |
-| Foundations | Convex vs non-convex | exp2 | tracks/track_a_continuous/exp2_landscapes.py | see results/track_a/SUMMARY.md, exp1 to exp6 | Done |
-| Foundations | Local minima / global minima / saddle points | exp2 | tracks/track_a_continuous/exp2_landscapes.py | see results/track_a/SUMMARY.md, exp1 to exp6 | Done |
-| Foundations | Basic quantum computing concepts | I1 to I5 | tracks/track_i_quantum_algos_qml/qi_sim.py, tracks/track_i_quantum_algos_qml/qi_qml.py | see results/track_i/SUMMARY.md | Done |
-| Foundations | Role of optimization in QML | I1 to I5 | tracks/track_i_quantum_algos_qml/qi_sim.py, tracks/track_i_quantum_algos_qml/qi_qml.py | see results/track_i/SUMMARY.md | Done |
-| Continuous | GD | exp1, exp3 | tracks/track_a_continuous/exp1_optimizer_comparison.py, tracks/track_a_continuous/exp3_stepsize_sensitivity.py | see results/track_a/SUMMARY.md, exp1 to exp6 | Done |
-| Continuous | SGD | exp4 | tracks/track_a_continuous/exp4_stochastic_and_noise.py | GD, SGD-256, SGD-32, SGD-1 valid (exp4a); Momentum and Adam stochastic rows invalid | Partial |
-| Continuous | Mini-batch SGD | exp4 | tracks/track_a_continuous/exp4_stochastic_and_noise.py | GD, SGD-256, SGD-32, SGD-1 valid (exp4a); Momentum and Adam stochastic rows invalid | Partial |
-| Continuous | Momentum | exp1, exp3 | tracks/track_a_continuous/exp1_optimizer_comparison.py, tracks/track_a_continuous/exp3_stepsize_sensitivity.py | see results/track_a/SUMMARY.md, exp1 to exp6 | Done |
-| Continuous | NAG | exp1, exp3 | tracks/track_a_continuous/exp1_optimizer_comparison.py, tracks/track_a_continuous/exp3_stepsize_sensitivity.py | see results/track_a/SUMMARY.md, exp1 to exp6 | Done |
-| Continuous | AdaGrad | exp1, exp3 | tracks/track_a_continuous/exp1_optimizer_comparison.py, tracks/track_a_continuous/exp3_stepsize_sensitivity.py | see results/track_a/SUMMARY.md, exp1 to exp6 | Done |
-| Continuous | RMSProp | exp1, exp3 | tracks/track_a_continuous/exp1_optimizer_comparison.py, tracks/track_a_continuous/exp3_stepsize_sensitivity.py | see results/track_a/SUMMARY.md, exp1 to exp6 | Done |
-| Continuous | Adam | exp1, exp3 | tracks/track_a_continuous/exp1_optimizer_comparison.py, tracks/track_a_continuous/exp3_stepsize_sensitivity.py | see results/track_a/SUMMARY.md, exp1 to exp6 | Done |
-| Continuous | Newton | exp5 | tracks/track_a_continuous/exp5_second_order.py | see results/track_a/SUMMARY.md, exp1 to exp6 | Done |
-| Continuous | Gauss-Newton | exp5 | tracks/track_a_continuous/exp5_second_order.py | see results/track_a/SUMMARY.md, exp1 to exp6 | Done |
-| Continuous | Backpropagation | exp6 | tracks/track_a_continuous/exp6_backprop_mlp.py | see results/track_a/SUMMARY.md, exp1 to exp6 | Done |
-| Continuous | Fisher / diagonal / low-rank curvature approximations | exp5 | tracks/track_a_continuous/exp5_second_order.py | see results/track_a/SUMMARY.md, exp1 to exp6 | Done |
-| Continuous | Hessian-vector products | exp5 | tracks/track_a_continuous/exp5_second_order.py | see results/track_a/SUMMARY.md, exp1 to exp6 | Done |
+| Foundations | ML as optimization (parameters, loss, regularization) | exp6 | tracks/track_a_continuous/exp6_backprop_mlp.py | two-layer MLP trained with GD, SGD, Momentum and Adam; L2 sweep: test accuracy 93.7 percent at l2 = 0 down to 50 percent at l2 = 1; see results/track_a/SUMMARY.md | Done |
+| Foundations | Continuous vs discrete | exp1 (continuous), B1 (discrete) | tracks/track_a_continuous/exp1_optimizer_comparison.py | continuous: quadratic and Rosenbrock (exp1); discrete: knapsack, Max-Cut, feature selection (B1 to B3); see results/track_a/SUMMARY.md | Done |
+| Foundations | Convex vs non-convex | exp2 | tracks/track_a_continuous/exp2_landscapes.py | final gaps after the budget: strongly convex 1e-16, convex 1.2e-6, non-convex Rosenbrock 3.8e-3; see results/track_a/SUMMARY.md | Done |
+| Foundations | Local minima / global minima / saddle points | exp2 | tracks/track_a_continuous/exp2_landscapes.py | undamped Newton converges to the saddle (f = 0); double well from positive x ends in the local minimum (f = -1.07 versus -3.51); see results/track_a/SUMMARY.md | Done |
+| Foundations | Basic quantum computing concepts | I1 to I5 | tracks/track_i_quantum_algos_qml/qi_sim.py, tracks/track_i_quantum_algos_qml/qi_qml.py | gate-level statevector simulator with gates, circuits, sampling and noise; DJ, BV, QFT, QPE, Grover, Shor run on it; see results/track_i/SUMMARY.md | Done |
+| Foundations | Role of optimization in QML | I1 to I5 | tracks/track_i_quantum_algos_qml/qi_sim.py, tracks/track_i_quantum_algos_qml/qi_qml.py | 12-parameter variational classifier trained with parameter shift and Adam: test accuracy 0.925 on moons, 0.968 on circles; RBF SVM was best; see results/track_i/SUMMARY.md | Done |
+| Continuous | GD | exp1, exp3 | tracks/track_a_continuous/exp1_optimizer_comparison.py, tracks/track_a_continuous/exp3_stepsize_sensitivity.py | 609 iterations to gradient norm 1e-6 on the kappa = 100 quadratic; stable up to lr 0.0234, diverges above 2/L = 0.04; see results/track_a/SUMMARY.md | Done |
+| Continuous | SGD | exp4 | tracks/track_a_continuous/exp4_stochastic_and_noise.py | GD, SGD-256, SGD-32 and SGD-1 reach loss 0.60965 to 0.60969 with 1, 8, 63 and 2000 gradient evaluations per epoch; Momentum and Adam rows invalid | Partial |
+| Continuous | Mini-batch SGD | exp4 | tracks/track_a_continuous/exp4_stochastic_and_noise.py | GD, SGD-256, SGD-32 and SGD-1 reach loss 0.60965 to 0.60969 with 1, 8, 63 and 2000 gradient evaluations per epoch; Momentum and Adam rows invalid | Partial |
+| Continuous | Momentum | exp1, exp3 | tracks/track_a_continuous/exp1_optimizer_comparison.py, tracks/track_a_continuous/exp3_stepsize_sensitivity.py | 115 iterations on the quadratic, 394 on Rosenbrock; see results/track_a/SUMMARY.md | Done |
+| Continuous | NAG | exp1, exp3 | tracks/track_a_continuous/exp1_optimizer_comparison.py, tracks/track_a_continuous/exp3_stepsize_sensitivity.py | 118 iterations on the quadratic, 1426 on Rosenbrock; see results/track_a/SUMMARY.md | Done |
+| Continuous | AdaGrad | exp1, exp3 | tracks/track_a_continuous/exp1_optimizer_comparison.py, tracks/track_a_continuous/exp3_stepsize_sensitivity.py | 248 iterations on the quadratic, 8663 on Rosenbrock; no divergence over the tested lr range; see results/track_a/SUMMARY.md | Done |
+| Continuous | RMSProp | exp1, exp3 | tracks/track_a_continuous/exp1_optimizer_comparison.py, tracks/track_a_continuous/exp3_stepsize_sensitivity.py | did not reach the tolerance on either problem (constant-step noise floor of order lr); see results/track_a/SUMMARY.md | Done |
+| Continuous | Adam | exp1, exp3 | tracks/track_a_continuous/exp1_optimizer_comparison.py, tracks/track_a_continuous/exp3_stepsize_sensitivity.py | 137 iterations on the quadratic, 17931 on Rosenbrock; widest usable lr range (3.1 decades); see results/track_a/SUMMARY.md | Done |
+| Continuous | Newton | exp5 | tracks/track_a_continuous/exp5_second_order.py | 1 iteration on the quadratic, 19 on Rosenbrock with line search, 5 versus 30 for GD on logistic regression; see results/track_a/SUMMARY.md | Done |
+| Continuous | Gauss-Newton | exp5 | tracks/track_a_continuous/exp5_second_order.py | undamped Gauss-Newton diverged from a poor start; Levenberg-Marquardt converged in 13 iterations to f = 0.0900; see results/track_a/SUMMARY.md | Done |
+| Continuous | Backpropagation | exp6 | tracks/track_a_continuous/exp6_backprop_mlp.py | manual gradient matches numerical gradient, max relative error 1.1e-9; see results/track_a/SUMMARY.md | Done |
+| Continuous | Fisher / diagonal / low-rank curvature approximations | exp5 | tracks/track_a_continuous/exp5_second_order.py | Fisher diagonal correlates 0.83 with the Hessian diagonal; rank-10 Hessian approximation has relative error 0.64 (flat spectrum); see results/track_a/SUMMARY.md | Done |
+| Continuous | Hessian-vector products | exp5 | tracks/track_a_continuous/exp5_second_order.py | finite-difference HVP matches the exact one to 1e-9; power iteration finds the top-5 eigenvalues to 3e-7; see results/track_a/SUMMARY.md | Done |
 | Continuous | Convergence for convex / strongly convex / non-convex | exp2 | tracks/track_a_continuous/exp2_landscapes.py | qualitative final gaps and plots only; rate fit invalid, see Failure Log case 8 | Partial |
-| Continuous | Step-size and optimizer tuning | exp3 | tracks/track_a_continuous/exp3_stepsize_sensitivity.py | see results/track_a/SUMMARY.md, exp1 to exp6 | Done |
+| Continuous | Step-size and optimizer tuning | exp3 | tracks/track_a_continuous/exp3_stepsize_sensitivity.py | usable lr range in decades (gap below 1e-3): Adam 3.08, AdaGrad 2.13, Momentum 1.89, NAG 1.42, GD 0.47, RMSProp 0.24; see results/track_a/SUMMARY.md | Done |
 | Continuous | Noisy objectives | exp4 | tracks/track_a_continuous/exp4_stochastic_and_noise.py | exp4b invalid, see Failure Log case 7 | Known bug - not covered |
-| Discrete | Greedy | B1 | tracks/track_b_discrete/knapsack.py | see results/track_b/SUMMARY.md | Done |
-| Discrete | ILP | B1 | tracks/track_b_discrete/knapsack.py | see results/track_b/SUMMARY.md | Done |
-| Discrete | Branch-and-Bound | B1 | tracks/track_b_discrete/knapsack.py | see results/track_b/SUMMARY.md | Done |
-| Discrete | Dynamic programming | B1 | tracks/track_b_discrete/knapsack.py | see results/track_b/SUMMARY.md | Done |
-| Discrete | Feature selection | B3 | tracks/track_b_discrete/qubo.py | see results/track_b/SUMMARY.md | Done |
-| Discrete | QUBO and Ising (binary-to-spin conversion, penalty terms) | B2, B3 | tracks/track_b_discrete/qubo.py | see results/track_b/SUMMARY.md | Done |
-| Discrete | Max-Cut | B2 | tracks/track_b_discrete/qubo.py | see results/track_b/SUMMARY.md | Done |
-| Quantum optimization | QAOA | C1 | tracks/track_c_quantum_opt/qaoa.py | see results/track_c/SUMMARY.md | Done |
-| Quantum optimization | VQE | C2 | tracks/track_c_quantum_opt/vqe.py | see results/track_c/SUMMARY.md | Done |
-| Quantum optimization | PQCs | C2, C5 | tracks/track_c_quantum_opt/vqe.py | see results/track_c/SUMMARY.md | Done |
-| Quantum optimization | QNNs | I5 | tracks/track_i_quantum_algos_qml/qi_qml.py | see results/track_i/SUMMARY.md | Done |
-| Quantum optimization | Parameter-shift | C2 | tracks/track_c_quantum_opt/vqe.py | see results/track_c/SUMMARY.md | Done |
-| Quantum optimization | SPSA | C2, C3 | tracks/track_c_quantum_opt/optimizers_q.py | see results/track_c/SUMMARY.md | Done |
-| Quantum optimization | Quantum natural gradient | C2 | tracks/track_c_quantum_opt/optimizers_q.py | see results/track_c/SUMMARY.md | Done |
-| Quantum optimization | Deutsch-Jozsa | I1 | tracks/track_i_quantum_algos_qml/qi_algos.py | see results/track_i/SUMMARY.md | Done |
-| Quantum optimization | Bernstein-Vazirani | I1 | tracks/track_i_quantum_algos_qml/qi_algos.py | see results/track_i/SUMMARY.md | Done |
-| Quantum optimization | Grover | I1, I2 | tracks/track_i_quantum_algos_qml/qi_algos.py | see results/track_i/SUMMARY.md | Done |
-| Quantum optimization | QFT | I1 | tracks/track_i_quantum_algos_qml/qi_algos.py | see results/track_i/SUMMARY.md | Done |
-| Quantum optimization | QPE | I1 | tracks/track_i_quantum_algos_qml/qi_algos.py | see results/track_i/SUMMARY.md | Done |
-| Quantum optimization | Shor | I1 | tracks/track_i_quantum_algos_qml/qi_algos.py | see results/track_i/SUMMARY.md | Done |
-| Quantum optimization | Quantum annealing | I3 | tracks/track_i_quantum_algos_qml/qi_anneal.py | see results/track_i/SUMMARY.md | Done |
-| Quantum optimization | Variational classifiers | I5 | tracks/track_i_quantum_algos_qml/qi_qml.py | see results/track_i/SUMMARY.md | Done |
-| Quantum optimization | Quantum kernels | I5 | tracks/track_i_quantum_algos_qml/qi_qml.py | see results/track_i/SUMMARY.md | Done |
-| Quantum optimization | Barren plateaus | C5 | tracks/track_c_quantum_opt/run_all.py | see results/track_c/SUMMARY.md | Done |
-| Quantum optimization | Finite-shot cost | C3 | tracks/track_c_quantum_opt/run_all.py | see results/track_c/SUMMARY.md | Done |
-| Quantum optimization | Hardware noise | C4 (simulated noise model) | tracks/track_c_quantum_opt/run_all.py | see results/track_c/SUMMARY.md; also Grover, BV and DJ in Track I experiment I4 (simulated) | Done (simulated, QAOA only) |
-| Quantum optimization | QUBO embedding limits (Track B QUBO solved with QAOA) | I3 (analytic) | tracks/track_i_quantum_algos_qml/qi_anneal.py | see results/track_i/SUMMARY.md (analytic formula, not measured) | Done |
-| Submodular | Diminishing returns | D1 | tracks/track_d_submodular_parallel_distributed/submodular.py | see results/track_d/SUMMARY.md (D1) | Done |
-| Submodular | Assumption testing | D1 | tracks/track_d_submodular_parallel_distributed/submodular.py | see results/track_d/SUMMARY.md (D1) | Done |
-| Submodular | Greedy selection | D1 | tracks/track_d_submodular_parallel_distributed/submodular.py | see results/track_d/SUMMARY.md (D1) | Done |
-| Submodular | Approximation guarantee conditions | D1 | tracks/track_d_submodular_parallel_distributed/submodular.py | see results/track_d/SUMMARY.md (D1) | Done |
+| Discrete | Greedy | B1 | tracks/track_b_discrete/knapsack.py | within 0.3 to 2.4 percent of the optimal knapsack value, 3 to 10 times faster than DP; see results/track_b/SUMMARY.md | Done |
+| Discrete | ILP | B1 | tracks/track_b_discrete/knapsack.py | equals DP and brute force on all 25 instances; 10 to 20 ms per instance (solver overhead); see results/track_b/SUMMARY.md | Done |
+| Discrete | Branch-and-Bound | B1 | tracks/track_b_discrete/knapsack.py | equals DP whenever proven optimal; 0.14 to 0.77 ms; see results/track_b/SUMMARY.md | Done |
+| Discrete | Dynamic programming | B1 | tracks/track_b_discrete/knapsack.py | fastest exact method (0.05 to 0.21 ms) for integer weights; see results/track_b/SUMMARY.md | Done |
+| Discrete | Feature selection | B3 | tracks/track_b_discrete/qubo.py | exact QUBO, greedy and annealing reach 95.0 to 95.4 percent cross-validated accuracy versus 92.0 percent for random subsets; see results/track_b/SUMMARY.md | Done |
+| Discrete | QUBO and Ising (binary-to-spin conversion, penalty terms) | B2, B3 | tracks/track_b_discrete/qubo.py | QUBO energy = Ising energy = minus cut for every assignment; penalty enforces exactly k = 7 features only for lambda >= 1; see results/track_b/SUMMARY.md | Done |
+| Discrete | Max-Cut | B2 | tracks/track_b_discrete/qubo.py | brute force, local search and simulated annealing all optimal on 3-regular graphs n = 6 to 16; see results/track_b/SUMMARY.md | Done |
+| Quantum optimization | QAOA | C1 | tracks/track_c_quantum_opt/qaoa.py | approximation ratio at depth 3: 1.00, 0.92, 0.89, 0.89 for n = 4, 6, 8, 10; does not beat exact or annealing; see results/track_c/SUMMARY.md | Done |
+| Quantum optimization | Track B QUBO instances solved with QAOA | C1 | tracks/track_c_quantum_opt/qaoa.py | the four Track B Max-Cut instances (n = 4 to 10) solved at depth 1 to 3; success probability of the optimum at depth 3: 1.00, 0.88, 0.42, 0.25; see results/track_c/SUMMARY.md | Done |
+| Quantum optimization | VQE | C2 | tracks/track_c_quantum_opt/vqe.py | 4-qubit transverse-field Ising chain, exact energy -4.759; best method QNG with final error 0.0026; see results/track_c/SUMMARY.md | Done |
+| Quantum optimization | PQCs | C2, C5 | tracks/track_c_quantum_opt/vqe.py | RY + CNOT ansatz with 16 parameters; barren-plateau study over 2 to 12 qubits; see results/track_c/SUMMARY.md | Done |
+| Quantum optimization | QNNs | I5 | tracks/track_i_quantum_algos_qml/qi_qml.py | 12-parameter variational classifier, see the variational classifier row; single train-test split, see Failure Log case 23; see results/track_i/SUMMARY.md | Done |
+| Quantum optimization | Parameter-shift | C2 | tracks/track_c_quantum_opt/vqe.py | gradient equals finite differences (checked); costs 2P evaluations per gradient; see results/track_c/SUMMARY.md | Done |
+| Quantum optimization | SPSA | C2, C3 | tracks/track_c_quantum_opt/optimizers_q.py | final error 0.0205 with 2 evaluations per step versus 0.0026 for QNG; shot-based comparison inconclusive; see results/track_c/SUMMARY.md | Done |
+| Quantum optimization | Quantum natural gradient | C2 | tracks/track_c_quantum_opt/optimizers_q.py | most evaluation-efficient: 4 of 5 runs below error 1e-2 after about 940 evaluations; see results/track_c/SUMMARY.md | Done |
+| Quantum optimization | Deutsch-Jozsa | I1 | tracks/track_i_quantum_algos_qml/qi_algos.py | 1 query versus 2^(n-1) + 1 classical; all 28 tested oracles classified correctly; see results/track_i/SUMMARY.md | Done |
+| Quantum optimization | Bernstein-Vazirani | I1 | tracks/track_i_quantum_algos_qml/qi_algos.py | 1 query versus n; secret recovered with probability 1 for n = 2 to 10; see results/track_i/SUMMARY.md | Done |
+| Quantum optimization | Grover | I2 (noise run in I4) | tracks/track_i_quantum_algos_qml/qi_algos.py | up to 80 times fewer queries than linear search at N = 16384; more gates up to n = 12; simulation 8 to 15 times slower in wall-clock time; see results/track_i/SUMMARY.md | Done |
+| Quantum optimization | QFT | I1 | tracks/track_i_quantum_algos_qml/qi_algos.py | matches the DFT matrix to 3e-16; 60 gates at n = 10; see results/track_i/SUMMARY.md | Done |
+| Quantum optimization | QPE | I1 | tracks/track_i_quantum_algos_qml/qi_algos.py | phase error below 2^-(t+1) for t = 3 to 10 (phase 0.3 only); best-outcome probability at least 0.57; see results/track_i/SUMMARY.md | Done |
+| Quantum optimization | Shor | I1 | tracks/track_i_quantum_algos_qml/qi_algos.py | order finding for N = 15 and 21; order recovered in 50 to 82 percent of runs; no advantage at this size; see results/track_i/SUMMARY.md | Done |
+| Quantum optimization | Quantum annealing | I3 | tracks/track_i_quantum_algos_qml/qi_anneal.py | ground-state probability at least 0.9 at annealing time T = 20 for n up to 8 and T = 50 for n = 10; see results/track_i/SUMMARY.md | Done |
+| Quantum optimization | Variational classifiers | I5 | tracks/track_i_quantum_algos_qml/qi_qml.py | test accuracy 0.925 (moons) and 0.968 (circles) at about 1100 times the training time of an RBF SVM; single train-test split, see Failure Log case 23; see results/track_i/SUMMARY.md | Done |
+| Quantum optimization | Quantum kernels | I5 | tracks/track_i_quantum_algos_qml/qi_qml.py | test accuracy 0.808 (moons) and 0.958 (circles); 1000 shots change accuracy by at most 1 point; single train-test split, see Failure Log case 23; see results/track_i/SUMMARY.md | Done |
+| Quantum optimization | Barren plateaus | C5 | tracks/track_c_quantum_opt/run_all.py | slope of log2 gradient variance per qubit: -0.98 global deep, -0.72 global shallow, -0.66 local deep, -0.09 local shallow; see results/track_c/SUMMARY.md | Done |
+| Quantum optimization | Finite-shot cost | C3 | tracks/track_c_quantum_opt/run_all.py | RMSE of the energy estimate falls as shots^-0.5 (fitted slope -0.49 and -0.50); the SPSA-with-shots comparison C3(b) is inconclusive, Failure Log case 13; see results/track_c/SUMMARY.md | Done (caveat) |
+| Quantum optimization | Hardware noise | C4 (QAOA, VQE), I4 (Grover, BV, DJ) | tracks/track_c_quantum_opt/run_all.py | QAOA ratio falls from 0.878 to 0.771 at 5 percent depolarizing noise; Grover success from 0.997 to 0.59 at 2 percent; the VQE part of C4 is invalid, Failure Log case 12; all simulated; see results/track_c/SUMMARY.md | Done (caveat) |
+| Quantum optimization | QUBO embedding limits on annealing hardware | I3 (analytic) | tracks/track_i_quantum_algos_qml/qi_anneal.py | analytic Chimera clique formula: 64 variables need 1088 qubits; 65 variables need a 17 by 17 grid and do not fit a 16 by 16 chip (not measured); see results/track_i/SUMMARY.md | Done |
+| Submodular | Diminishing returns | D1 | tracks/track_d_submodular_parallel_distributed/submodular.py | coverage: 0 violations; R2 feature objective: 691 violating triples, worst 0.055; see results/track_d/SUMMARY.md | Done |
+| Submodular | Assumption testing | D1 | tracks/track_d_submodular_parallel_distributed/submodular.py | coverage: 0 violations; R2 feature objective: 691 violating triples, worst 0.055; see results/track_d/SUMMARY.md | Done |
+| Submodular | Greedy selection | D1 | tracks/track_d_submodular_parallel_distributed/submodular.py | 99.1 to 100 percent of the exact optimum; lazy greedy 120 versus 355 evaluations at k = 10; see results/track_d/SUMMARY.md | Done |
+| Submodular | Approximation guarantee conditions | D1 | tracks/track_d_submodular_parallel_distributed/submodular.py | (1 - 1/e) guarantee verified only for coverage; for R2 greedy was suboptimal at k = 5 (ratio 0.986); see results/track_d/SUMMARY.md | Done |
 | Parallel | Load balancing | D2(c)(d) | tracks/track_d_submodular_parallel_distributed/parallel_tools.py | code written, not run: simulator loop hang, Failure Log case 16 | Not completed |
 | Parallel | Makespan | D2(c)(d) | tracks/track_d_submodular_parallel_distributed/parallel_tools.py | code written, not run: simulator loop hang, Failure Log case 16 | Not completed |
 | Parallel | Work stealing | D2(c)(d) | tracks/track_d_submodular_parallel_distributed/parallel_tools.py | code written, not run: simulator loop hang, Failure Log case 16 | Not completed |
@@ -68,20 +71,23 @@ Progress tracker across Chapter 6 optimization areas and techniques.
 | Parallel | Parallel efficiency | D2(a)(b) | tracks/track_d_submodular_parallel_distributed/parallel_tools.py | code written, not run: simulator loop hang, Failure Log case 16 | Not completed |
 | Parallel | Amdahl | D2(a)(b) | tracks/track_d_submodular_parallel_distributed/parallel_tools.py | code written, not run: simulator loop hang, Failure Log case 16 | Not completed |
 | Parallel | Gustafson | D2(a)(b) | tracks/track_d_submodular_parallel_distributed/parallel_tools.py | code written, not run: simulator loop hang, Failure Log case 16 | Not completed |
-| Strategy selection | Strategy selection | | | | TODO |
-| Distributed / multi-task | FedAvg | D3 | tracks/track_d_submodular_parallel_distributed/federated.py | (D3) | Done |
-| Distributed / multi-task | MGDA | D4 | tracks/track_d_submodular_parallel_distributed/multitask.py | (D4) | Done |
-| Distributed / multi-task | GradNorm | D4 | tracks/track_d_submodular_parallel_distributed/multitask.py | (D4) | Done |
+| Strategy selection | Strategy selection | E0 | tracks/track_e_case_study/run_all.py (strategy table) | strategy-selection table (variable type, size, exact or heuristic, hardware, parallelism, technique) in results/track_e/strategy_table.csv; rule: exact methods up to about 15 to 20 stops, nearest neighbour + 2-opt or annealing beyond | Done |
+| Distributed / multi-task | FedAvg | D3 | tracks/track_d_submodular_parallel_distributed/federated.py | 73.8 to 74.3 percent test accuracy for all settings versus 73.9 percent centralized; label skew caused no measurable loss; see results/track_d/SUMMARY.md | Done |
+| Distributed / multi-task | MGDA | D4 | tracks/track_d_submodular_parallel_distributed/multitask.py | alpha = 1 throughout, so the shared layer followed only task 1; task 2 R2 0.923; see results/track_d/SUMMARY.md | Done |
+| Distributed / multi-task | GradNorm | D4 | tracks/track_d_submodular_parallel_distributed/multitask.py | R2 above 0.999 on both tasks, matches equal weighting; final weights 1.71 and 0.29; see results/track_d/SUMMARY.md | Done |
 
-## Domain tracks (E to J) and parallel experiments
+## Track overview (A to J)
 
 | Track | Content | Code location | Result | Status |
 | :--- | :--- | :--- | :--- | :--- |
+| A | continuous optimisation | tracks/track_a_continuous/ | see results/track_a/SUMMARY.md; four parts invalid (Failure Log cases 6 to 9) | Done (caveat) |
+| B | discrete optimisation | tracks/track_b_discrete/ | see results/track_b/SUMMARY.md | Done |
+| C | quantum optimisation (simulated) | tracks/track_c_quantum_opt/ | see results/track_c/SUMMARY.md; C4 VQE part and C3(b) excluded (cases 12 and 13) | Done (caveat) |
+| D | submodular, parallel, distributed | tracks/track_d_submodular_parallel_distributed/ | D1, D3, D4 done; D2 not completed | Partial |
 | D2 | measured parallel scaling, load balancing, data/pipeline parallelism | tracks/track_d_submodular_parallel_distributed/ | code written, not run: simulator loop hang, Failure Log case 16 | Not completed |
-| E | main case study | tracks/track_e_case_study/ | see results/track_e/SUMMARY.md (quick configuration) | Done |
+| E | main case study | tracks/track_e_case_study/ | see results/track_e/SUMMARY.md (quick configuration) | Done (caveat) |
 | F | compiler optimisation | tracks/track_f_compiler/ | see results/track_f/SUMMARY.md | Done |
 | G | xv6 operating system | tracks/track_g_xv6/ | see results/track_g/ and tracks/track_g_xv6/patches/lottery_scheduler.diff | Done |
 | H | DBMS index selection | tracks/track_h_dbms/ | see results/track_h/SUMMARY.md | Done |
-| I | quantum algorithms and QML | tracks/track_i_quantum_algos_qml/ | see results/track_i/SUMMARY.md | Done |
+| I | quantum algorithms and QML | tracks/track_i_quantum_algos_qml/ | see results/track_i/SUMMARY.md; deviations in Failure Log case 23 | Done (caveat) |
 | J | software-engineering optimisation | tracks/track_j_software_eng/ | see results/track_j/SUMMARY.md: minimisation and prioritisation done on 38 tests; mutation testing not completed | Partial |
-
